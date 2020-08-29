@@ -23,7 +23,7 @@ namespace Application.Activities
       public async Task<List<Activity>> Handle(Query request, CancellationToken cancellationToken)
       {
         List<Activity> activities = await _context.Activities.ToListAsync();
-
+        System.Console.WriteLine("Listing all activities");
         return activities;
       }
     }

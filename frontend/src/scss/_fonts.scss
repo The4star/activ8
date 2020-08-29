@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Roboto&display=swap');
+
+h1 {
+
+}
+
+h2 {
+
+}
+
+h3 {
+  font-size: 30px;
+  @include respond-until(desktop) {
+    font-size: 20px;
+  }
+}
+
+p, button {
+  font-size: 16px;
+  @include respond-until(desktop) {
+    font-size: 12px;
+  }
+}
+

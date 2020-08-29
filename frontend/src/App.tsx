@@ -1,40 +1,11 @@
-import React, {Component} from 'react';
-import axios from 'axios';
+import React from 'react';
 
-// icons
-import GroupIcon from '@material-ui/icons/Group';
+import Router from './Router'
 
-class App extends Component {
-
-  state = {
-    values: []
-  }
-
-  componentDidMount = async () => {
-    const response = await axios.get('http://localhost:5000/api/values')
-    
-    this.setState({
-      values: response.data
-    })
-  }
-
-  render() {
+const App = () => {
     return (
-      <div className="container">
-        <header>
-          <GroupIcon />
-          <h1>Activ8</h1>
-        </header>
-          <ul>
-            {
-              this.state.values.map((value: any) => (
-                <li>{value.name}</li>
-              ))
-            }
-          </ul>
-      </div>
-    );
-  }
+      <Router />        
+    )
 }
 
 export default App;

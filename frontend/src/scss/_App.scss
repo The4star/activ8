@@ -1,0 +1,23 @@
+.main {
+  margin-top: 60px;
+  background: $main-background;
+  .container {
+    padding: 20px;
+    header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      svg {
+        width: 2em;
+        height: 2em;
+      }
+      h1 {
+        margin-left: 10px;
+      }
+    }
+
+    ul {
+      list-style: none;
+    }
+  }
+}

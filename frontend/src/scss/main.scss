@@ -1,0 +1,13 @@
+* {
+  margin: 0;
+  padding: 0;
+  // font-family: 'Montserrat', sans-serif;
+  font-family: 'Roboto', sans-serif;
+}
+
+@import './variables';
+@import './media-queries';
+@import './fonts';
+@import './App';
+@import './components/nav.styles';
+@import './components/activities-dashboard.styles';
