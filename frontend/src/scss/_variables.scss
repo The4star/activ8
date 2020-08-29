@@ -1,0 +1,19 @@
+// colours
+$grey: #EBF1F1;
+$dark-grey: #6B6E77;
+$white: white;
+$green: #94C9A9;
+
+
+// main
+$main-background: $grey;
+
+// nav
+$nav-background: radial-gradient(50% 50% at 50% 50%, rgba(11, 52, 105, 0.8) 0%, rgba(11, 52, 105, 0.8) 0.01%, rgba(6, 48, 103, 0.8) 100%);
+$nav-text: $white;
+$nav-button: $green;
+
+// screen sizes
+$size-tablet: 768px;
+$size-desktop: 1025px;
+$size-wide: 1300px;

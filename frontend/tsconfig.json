@@ -20,10 +20,6 @@
     "jsx": "react",
     "experimentalDecorators": true
   },
-  "typeRoots": [
-    "./node_modules/@types", // for regular node_modules/@type folders installed with npm/yarn
-    "src/types" // custom types/interfaces
-  ],
   "include": [
     "src"
   ]
