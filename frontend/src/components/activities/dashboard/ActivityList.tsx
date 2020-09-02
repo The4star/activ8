@@ -5,9 +5,10 @@ import { IActivity } from '../../../types/activities.types'
 
 interface IProps {
   activities: IActivity[];
+  selectActivity: (id:string) => void;
 }
 
-const ActivityList = ({activities}:IProps) => {
+const ActivityList = ({activities, selectActivity}:IProps) => {
 
   const renderActivity = (activity: IActivity) => {
     return(
@@ -21,7 +22,7 @@ const ActivityList = ({activities}:IProps) => {
         <div className="activities-dashboard__list__item__category">
           {activity.category}
         </div>
-        <button className="activities-dashboard__list__item__view-button">View</button>
+        <button onClick={() => selectActivity(activity.id)} className="activities-dashboard__list__item__view-button">View</button>
       </div>
     )
   }
