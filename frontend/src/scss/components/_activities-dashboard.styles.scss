@@ -1,16 +1,13 @@
 .activities-dashboard {
+  margin: auto auto;
   &__list {
     width: 100%;
     &__item{
       position: relative;
-      width: 80%;
-      margin: 20px;
+      width: 90%;
+      margin: 20px 0;
       padding: 10px;
       background: $white;
-
-      @include respond-until(desktop) {
-        width: 100%;
-      }
 
       p {
         margin: 10px 0;
