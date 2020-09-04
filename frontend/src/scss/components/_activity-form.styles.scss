@@ -2,6 +2,16 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  // background: $white;
-  // padding: 10px
+
+  button {
+    margin: 5px 0;
+    cursor: pointer;
+    background: $white;
+    padding: 5px;
+  }
+
+  &__submit {
+      border: 2px solid $green;
+      color: $dark-green;
+  }
 }

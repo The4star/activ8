@@ -1,40 +1,32 @@
-import React, {useState, useEffect, Fragment} from 'react';
-import axios from 'axios';
+import React, { Fragment } from 'react';
 
 // types 
 import {IActivity} from '../types/activities.types'
 import ActivitiesDashboard from '../components/activities/dashboard/ActivitiesDashboard';
 
-const Activities = () => {
-  const [activities, setActivities ] = useState<IActivity[]>([])
-  const [selectedActivity, setSelectedActivity] = useState<IActivity | null >(null);
 
-  useEffect(() => {
-    getActivities()
-  }, [])
-
-  const handleSelectActivity = (id: string) => {
-    
-    const activity = activities.find(a => a.id === id)
-    
-    if(activity !== undefined) {
-      setSelectedActivity(activity)
-      
-      setTimeout(() => {
-        const activityDetails = document.querySelector('.activity-details');
-        if (activityDetails) {
-          activityDetails.scrollIntoView({behavior:"smooth", block: "center"})
-        }
-      }, 200);
-      
-    }
-  }
-  
-  const getActivities = async () => {
-    const response = await axios.get<IActivity[]>('http://localhost:5000/api/activities');
-    setActivities(response.data);
-  }  
-
+interface IProps {
+  activities: IActivity[];
+  selectedActivity: IActivity | null;
+  setSelectedActivity: (activity: IActivity | null) => void;
+  editMode: boolean;
+  setEditMode: (editMode: boolean) => void;
+  handleSelectActivity: (id: string) => void;
+  createActivity: (activity:IActivity) => void;
+  editActivity: (activity:IActivity) => void;
+  deleteActivity: (activityId: string) => void;
+}
+const Activities = ({
+  activities, 
+  selectedActivity, 
+  setSelectedActivity, 
+  editMode, 
+  setEditMode, 
+  handleSelectActivity,
+  createActivity,
+  editActivity,
+  deleteActivity 
+}:IProps) => {
     return (
       <Fragment>
         <div className="main">
@@ -42,7 +34,13 @@ const Activities = () => {
             <ActivitiesDashboard 
               activities={activities} 
               selectActivity={handleSelectActivity}
+              setSelectedActivity={setSelectedActivity}
               selectedActivity={selectedActivity}
+              editMode={editMode}
+              setEditMode={setEditMode}
+              createActivity={createActivity}
+              editActivity={editActivity}
+              deleteActivity={deleteActivity}
             />
           </div>
         </div>

@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import spacetime from 'spacetime';
 import { IActivity } from '../../../types/activities.types'
 
 
 interface IProps {
   selectedActivity: IActivity | null ;
+  setEditMode: (editMode: boolean) => void;
+  setSelectedActivity: (activity: IActivity | null) => void;
 }
 
-const ActivityDetails = ({ selectedActivity }:IProps) => {
+const ActivityDetails = ({ selectedActivity, setSelectedActivity, setEditMode }:IProps) => {
   if (selectedActivity) {
     return (
       <div className="activity-details">
@@ -20,15 +22,14 @@ const ActivityDetails = ({ selectedActivity }:IProps) => {
           <p>{selectedActivity.description}</p>
         </div>
         <div className="activity-details__button-area">
-          <button>Edit</button>
-          <button>Cancel</button>
+          <button onClick={() => setEditMode(true)}>Edit</button>
+          <button onClick={() => setSelectedActivity(null)}>Close</button>
         </div>
       </div>
     )
   } else {
     return (
-      <>
-      </>
+      <Fragment />
     ) 
   }
 }
