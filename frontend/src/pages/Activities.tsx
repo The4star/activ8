@@ -1,9 +1,8 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, SyntheticEvent} from 'react';
 
 // types 
 import {IActivity} from '../types/activities.types'
 import ActivitiesDashboard from '../components/activities/dashboard/ActivitiesDashboard';
-
 
 interface IProps {
   activities: IActivity[];
@@ -14,7 +13,9 @@ interface IProps {
   handleSelectActivity: (id: string) => void;
   createActivity: (activity:IActivity) => void;
   editActivity: (activity:IActivity) => void;
-  deleteActivity: (activityId: string) => void;
+  deleteActivity: (e: SyntheticEvent<HTMLButtonElement>, activityId: string) => void;
+  submitting: boolean,
+  buttonTarget: string;
 }
 const Activities = ({
   activities, 
@@ -25,7 +26,9 @@ const Activities = ({
   handleSelectActivity,
   createActivity,
   editActivity,
-  deleteActivity 
+  deleteActivity,
+  submitting,
+  buttonTarget
 }:IProps) => {
     return (
       <Fragment>
@@ -41,6 +44,8 @@ const Activities = ({
               createActivity={createActivity}
               editActivity={editActivity}
               deleteActivity={deleteActivity}
+              submitting={submitting}
+              buttonTarget={buttonTarget}
             />
           </div>
         </div>

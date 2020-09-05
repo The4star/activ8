@@ -1,6 +1,7 @@
 .main {
   margin-top: 60px;
   background: $main-background;
+  min-height: 100vh;
   .container {
     padding: 20px;
     header {
@@ -19,5 +20,23 @@
     ul {
       list-style: none;
     }
+  }
+
+  .seperator {
+    margin: 30px 0;
+  }
+
+  .button-wrapper {
+    position: relative;
+  }
+
+  .button-progress {
+    color: $green;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -12px;
+    margin-left: -12px;
+    z-index: 2;
   }
 }

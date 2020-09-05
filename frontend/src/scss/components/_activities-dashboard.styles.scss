@@ -21,6 +21,7 @@
         color: $dark-grey;
       }
       &__cta-section {
+        display: flex;
         position: absolute;
         right: 10px;
         bottom: 10px;
