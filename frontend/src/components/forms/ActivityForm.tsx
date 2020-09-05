@@ -1,18 +1,23 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import { IActivity } from '../../types/activities.types';
+import CircularProgress from '@material-ui/core/CircularProgress/CircularProgress';
 
 interface IProps {
   setEditMode: (editMode: boolean) => void;
   selectedActivity: IActivity | null;
   createActivity: (activity:IActivity) => void;
   editActivity: (activity:IActivity) => void;
+  submitting: boolean;
 }
 const ActivityForm = ({
   setEditMode, 
   selectedActivity,
   createActivity,
-  editActivity
+  editActivity,
+  submitting
 }:IProps) => {
 
   const initializeForm = (): IActivity => {
@@ -40,13 +45,18 @@ const ActivityForm = ({
     }
   }
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const {value, name} = event.target;
+    setActivity({...activity, [name]: value})
+  }
 
+  const handleSelectChange = (event: any) => {
+    const {value, name} = event.target;
     setActivity({...activity, [name]: value})
   }
 
   const [activity, setActivity ] = useState<IActivity>(initializeForm())
+  
   return (
     <div className="container">
       <form onSubmit={handleSubmit} className="activity-form">
@@ -72,16 +82,19 @@ const ActivityForm = ({
             shrink: true,
           }}
         />
-        <TextField 
+        <Select 
           label="Category"
           name="category"
-          onChange={handleInputChange} 
-          value={activity.category}
-          margin="normal" 
-          InputLabelProps={{
-            shrink: true,
-          }}
-        />
+          defaultValue="drinks"
+          onChange={handleSelectChange} 
+          value={activity.category} 
+        >
+          <MenuItem value="culture">culture</MenuItem>
+          <MenuItem value="drinks">drinks</MenuItem>
+          <MenuItem value="travel">travel</MenuItem>
+          <MenuItem value="music">music</MenuItem>
+          <MenuItem value="film">film</MenuItem>
+        </Select>
         <TextField 
           id="date"
           label="Date"
@@ -115,7 +128,10 @@ const ActivityForm = ({
             shrink: true,
           }}
         />
-        <button className="activity-form__submit" type="submit">Submit</button>
+        <div className="button-wrapper">
+          <button className="activity-form__submit" type="submit">Submit</button>
+          {submitting && <CircularProgress size={24} className="button-progress" />}
+        </div>
         <button className="activity-form__cancel" onClick={() => setEditMode(false)}>Cancel</button>
       </form>
     </div>

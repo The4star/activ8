@@ -1,21 +1,24 @@
-import React, {useState, useEffect } from 'react';
+import React, {useState, useEffect, SyntheticEvent } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
-import axios from 'axios';
 
 // components
 import Nav from './components/nav/Nav';
 import Home from './pages/Home'
 import Activities from './pages/Activities'
 
+import { ActivitiesApi } from './api/agent';
+
 import {IActivity} from './types/activities.types'
 
 const Router = () => {
 
-  const [activities, setActivities ] = useState<IActivity[]>([])
+  const [activities, setActivities ] = useState<IActivity[]>([]);
   const [selectedActivity, setSelectedActivity] = useState<IActivity | null >(null);
-  const [editMode, setEditMode ] = useState<boolean>(false)
-  
+  const [editMode, setEditMode ] = useState<boolean>(false);
+  const [submitting, setSubmitting] = useState<boolean>(false);
+  const [buttonTarget, setButtonTarget] = useState<string>("");
+
   useEffect(() => {
     getActivities()
   }, [])
@@ -42,30 +45,58 @@ const Router = () => {
     
   }
 
-  const createActivity = (activity: IActivity) => {
-    activity.id = uuid()
-    console.log('created')
-    console.log(activity)
+  const createActivity = async (activity: IActivity) => {
+    try {
+      setSubmitting(true);
+      activity.id = uuid()
+      await ActivitiesApi.create(activity);
+      getActivities()
+      setSelectedActivity(activity);
+      setEditMode(false);      
+      setSubmitting(false)
+    } catch (error) {
+      console.log(error)
+    }
+    
   }
 
-  const editActivity = (activity:IActivity) => {
-    console.log('edited')
-    console.log(activity)
+  const editActivity = async (activity:IActivity) => {
+    try {
+      setSubmitting(true)
+      await ActivitiesApi.update(activity)
+      getActivities()
+      setSelectedActivity(activity);
+      setEditMode(false);
+      setSubmitting(false);
+    } catch (error) {
+      console.log(error)
+    }
   }
 
-  const deleteActivity = (activityId: string) => {
-    console.log('deleted')
-    console.log(activityId)
+  const deleteActivity = async (e: SyntheticEvent<HTMLButtonElement>, activityId: string) => {
+    try {
+      setSubmitting(true)
+      setButtonTarget(e.currentTarget.name)
+      await ActivitiesApi.delete(activityId);
+      getActivities()
+      setSelectedActivity(null)
+      setEditMode(false) 
+      setSubmitting(false)
+    } catch (error) {
+      console.log(error)
+    }
+    
   }
   
   const getActivities = async () => {
-    const response = await axios.get<IActivity[]>('http://localhost:5000/api/activities');
+    const response = await ActivitiesApi.list();
     const activities:IActivity[] = []
     
-    response.data.forEach(activity => {
+    response.forEach(activity => {
       activity.date = activity.date.split(".")[0]
       activities.push(activity);
     })
+
     setActivities(activities);
   }  
 
@@ -85,6 +116,8 @@ const Router = () => {
                 createActivity={createActivity}
                 editActivity={editActivity}
                 deleteActivity={deleteActivity}
+                submitting={submitting}
+                buttonTarget={buttonTarget}
               />
             )}  
           />

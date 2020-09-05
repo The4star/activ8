@@ -11,6 +11,7 @@ interface IProps {
 
 const ActivityDetails = ({ selectedActivity, setSelectedActivity, setEditMode }:IProps) => {
   if (selectedActivity) {
+    console.log(selectedActivity.id)
     return (
       <div className="activity-details">
         <div className="activity-details__img-container">

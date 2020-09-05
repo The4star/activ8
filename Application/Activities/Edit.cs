@@ -43,9 +43,7 @@ namespace Application.Activities
         activity.Date = request.Date ?? activity.Date;
         activity.City = request.City ?? activity.City;
         activity.Venue = request.Venue ?? activity.Venue;
-
         bool success = await _context.SaveChangesAsync() > 0;
-
         if(success) 
         {
             System.Console.WriteLine($"Updated activity with id: {activity.Id}");

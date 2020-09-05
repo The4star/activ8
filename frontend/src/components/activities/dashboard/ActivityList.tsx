@@ -1,15 +1,24 @@
-import React from 'react'
+import React, {SyntheticEvent} from 'react'
 import spacetime from 'spacetime';
 // types
 import { IActivity } from '../../../types/activities.types'
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 interface IProps {
   activities: IActivity[];
   selectActivity: (id:string) => void;
-  deleteActivity: (activityId: string) => void;
+  deleteActivity: (e: SyntheticEvent<HTMLButtonElement>, activityId: string) => void;
+  submitting: boolean;
+  buttonTarget:string;
 }
 
-const ActivityList = ({activities, selectActivity, deleteActivity}:IProps) => {
+const ActivityList = ({
+  activities,
+  selectActivity, 
+  deleteActivity, 
+  submitting, 
+  buttonTarget
+}:IProps) => {
 
   const renderActivity = (activity: IActivity) => {
     return(
@@ -24,7 +33,10 @@ const ActivityList = ({activities, selectActivity, deleteActivity}:IProps) => {
           {activity.category}
         </div>
         <div className="activities-dashboard__list__item__cta-section">
-          <button onClick={() => deleteActivity(activity.id)} className="activities-dashboard__list__item__cta-section__delete-button">Delete</button>
+          <div className="button-wrapper">
+            <button name={activity.id} onClick={(e: SyntheticEvent<HTMLButtonElement>) => deleteActivity(e, activity.id)} className="activities-dashboard__list__item__cta-section__delete-button">Delete</button>
+            {submitting && buttonTarget === activity.id && <CircularProgress size={24} className="button-progress" />}
+          </div>
           <button onClick={() => selectActivity(activity.id)} className="activities-dashboard__list__item__cta-section__view-button">View</button>
         </div>
         
