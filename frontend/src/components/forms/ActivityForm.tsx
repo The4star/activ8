@@ -1,26 +1,27 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, ChangeEvent, FormEvent, useContext } from 'react';
+import { observer } from 'mobx-react-lite';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import { IActivity } from '../../types/activities.types';
 import CircularProgress from '@material-ui/core/CircularProgress/CircularProgress';
 
+// stores
+import ActivityStore from '../../stores/activityStore';
 interface IProps {
-  setEditMode: (editMode: boolean) => void;
-  selectedActivity: IActivity | null;
   createActivity: (activity:IActivity) => void;
   editActivity: (activity:IActivity) => void;
   submitting: boolean;
 }
 const ActivityForm = ({
-  setEditMode, 
-  selectedActivity,
   createActivity,
   editActivity,
   submitting
 }:IProps) => {
-
+  const activityStore = useContext(ActivityStore);
+  const { selectedActivity, setEditMode } = activityStore;
   const initializeForm = (): IActivity => {
+    
     if (selectedActivity) {
       return selectedActivity
     } else {
@@ -138,4 +139,4 @@ const ActivityForm = ({
   )
 }
 
-export default ActivityForm
+export default observer(ActivityForm)

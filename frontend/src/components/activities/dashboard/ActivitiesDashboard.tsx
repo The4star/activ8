@@ -1,20 +1,19 @@
-import React, { Fragment, SyntheticEvent } from 'react';
+import React, { Fragment, SyntheticEvent, useContext } from 'react';
+import { observer } from 'mobx-react-lite';
 import Grid from '@material-ui/core/Grid';
 
 // types
 import { IActivity } from '../../../types/activities.types'
+
 // components
 import ActivityList from './ActivityList';
 import ActivityDetails from './ActivityDetails';
 import ActivityForm from '../../forms/ActivityForm';
 import Skeleton from '@material-ui/lab/Skeleton';
+
+// stores
+import ActivityStore from '../../../stores/activityStore';
 interface IProps {
-  activities: IActivity[];
-  selectActivity: (id:string) => void;
-  setSelectedActivity: (activity: IActivity | null) => void;
-  selectedActivity: IActivity | null;
-  editMode: boolean;
-  setEditMode: (editMode: boolean) => void;
   createActivity: (activity:IActivity) => void;
   editActivity: (activity:IActivity) => void;
   deleteActivity: (e: SyntheticEvent<HTMLButtonElement>, activityId: string) => void;
@@ -23,26 +22,21 @@ interface IProps {
 }
 
 const ActivitiesDashboard = ({
-  activities, 
-  selectActivity, 
-  setSelectedActivity, 
-  selectedActivity, 
-  editMode, 
-  setEditMode,
   createActivity,
   editActivity,
   deleteActivity,
   submitting,
   buttonTarget 
-}:IProps) => {
+}:IProps) => {  
+  const activityStore = useContext(ActivityStore);
+  const { activities, selectedActivity, editMode } = activityStore;
+
   return (
     <Grid className="activities-dashboard" container wrap="wrap-reverse" justify="center" >
       <Grid item xs={12} sm={6} >
         {
           activities.length ?
-            <ActivityList 
-              activities={activities} 
-              selectActivity={selectActivity}
+            <ActivityList  
               deleteActivity={deleteActivity}
               submitting={submitting}
               buttonTarget={buttonTarget}
@@ -71,19 +65,13 @@ const ActivitiesDashboard = ({
       <Grid item xs={12} sm={4} >
         {
           selectedActivity && !editMode ?
-          <ActivityDetails 
-            selectedActivity={selectedActivity} 
-            setSelectedActivity={setSelectedActivity} 
-            setEditMode={setEditMode}
-          />
+          <ActivityDetails />
           : <Fragment />
         }
         {
           editMode &&
           <ActivityForm 
             key={selectedActivity ? selectedActivity.id : 0} 
-            setEditMode={setEditMode} 
-            selectedActivity={selectedActivity} 
             createActivity={createActivity}
             editActivity={editActivity}
             submitting={submitting}
@@ -95,4 +83,4 @@ const ActivitiesDashboard = ({
   )
 }
 
-export default ActivitiesDashboard;
+export default observer(ActivitiesDashboard);

@@ -1,17 +1,15 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useContext } from 'react'
+import { observer } from 'mobx-react-lite';
 import spacetime from 'spacetime';
-import { IActivity } from '../../../types/activities.types'
 
+// stores
+import ActivityStore from '../../../stores/activityStore';
 
-interface IProps {
-  selectedActivity: IActivity | null ;
-  setEditMode: (editMode: boolean) => void;
-  setSelectedActivity: (activity: IActivity | null) => void;
-}
+const ActivityDetails = () => {
+  const activityStore = useContext(ActivityStore);
+  const { selectActivity, selectedActivity, setEditMode  } = activityStore;
 
-const ActivityDetails = ({ selectedActivity, setSelectedActivity, setEditMode }:IProps) => {
   if (selectedActivity) {
-    console.log(selectedActivity.id)
     return (
       <div className="activity-details">
         <div className="activity-details__img-container">
@@ -24,7 +22,7 @@ const ActivityDetails = ({ selectedActivity, setSelectedActivity, setEditMode }:
         </div>
         <div className="activity-details__button-area">
           <button onClick={() => setEditMode(true)}>Edit</button>
-          <button onClick={() => setSelectedActivity(null)}>Close</button>
+          <button onClick={() => selectActivity(undefined)}>Close</button>
         </div>
       </div>
     )
@@ -35,4 +33,4 @@ const ActivityDetails = ({ selectedActivity, setSelectedActivity, setEditMode }:
   }
 }
 
-export default ActivityDetails;
+export default observer(ActivityDetails);
