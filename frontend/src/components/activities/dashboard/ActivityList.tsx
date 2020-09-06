@@ -1,25 +1,28 @@
-import React, {SyntheticEvent} from 'react'
+import React, {SyntheticEvent, useContext} from 'react'
+import { observer } from 'mobx-react-lite';
 import spacetime from 'spacetime';
+
 // types
 import { IActivity } from '../../../types/activities.types'
+
+// components
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+// stores
+import ActivityStore from '../../../stores/activityStore';
 interface IProps {
-  activities: IActivity[];
-  selectActivity: (id:string) => void;
   deleteActivity: (e: SyntheticEvent<HTMLButtonElement>, activityId: string) => void;
   submitting: boolean;
   buttonTarget:string;
 }
 
-const ActivityList = ({
-  activities,
-  selectActivity, 
+const ActivityList = ({ 
   deleteActivity, 
   submitting, 
   buttonTarget
 }:IProps) => {
-
+  const activityStore = useContext(ActivityStore);
+  const { selectActivity, activities } = activityStore;
   const renderActivity = (activity: IActivity) => {
     return(
       <div key={activity.id} className="activities-dashboard__list__item">
@@ -47,13 +50,13 @@ const ActivityList = ({
   return (
     <div className="activities-dashboard__list">
       {
-        activities.map(activity => (
-          renderActivity(activity)
-        ))
+        activities.map(activity => {
+         return renderActivity(activity)
+        })
       }
     </div>
     
   )
 }
 
-export default ActivityList
+export default observer(ActivityList)

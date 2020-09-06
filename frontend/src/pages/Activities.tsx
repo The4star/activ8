@@ -1,16 +1,12 @@
 import React, { Fragment, SyntheticEvent} from 'react';
+import { observer } from 'mobx-react-lite';
 
 // types 
 import {IActivity} from '../types/activities.types'
 import ActivitiesDashboard from '../components/activities/dashboard/ActivitiesDashboard';
 
+// stores
 interface IProps {
-  activities: IActivity[];
-  selectedActivity: IActivity | null;
-  setSelectedActivity: (activity: IActivity | null) => void;
-  editMode: boolean;
-  setEditMode: (editMode: boolean) => void;
-  handleSelectActivity: (id: string) => void;
   createActivity: (activity:IActivity) => void;
   editActivity: (activity:IActivity) => void;
   deleteActivity: (e: SyntheticEvent<HTMLButtonElement>, activityId: string) => void;
@@ -18,12 +14,6 @@ interface IProps {
   buttonTarget: string;
 }
 const Activities = ({
-  activities, 
-  selectedActivity, 
-  setSelectedActivity, 
-  editMode, 
-  setEditMode, 
-  handleSelectActivity,
   createActivity,
   editActivity,
   deleteActivity,
@@ -35,12 +25,6 @@ const Activities = ({
         <div className="main">
           <div className="container">
             <ActivitiesDashboard 
-              activities={activities} 
-              selectActivity={handleSelectActivity}
-              setSelectedActivity={setSelectedActivity}
-              selectedActivity={selectedActivity}
-              editMode={editMode}
-              setEditMode={setEditMode}
               createActivity={createActivity}
               editActivity={editActivity}
               deleteActivity={deleteActivity}
@@ -54,4 +38,4 @@ const Activities = ({
     )
 }
 
-export default Activities;
+export default observer(Activities);

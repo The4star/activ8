@@ -1,57 +1,39 @@
-import React, {useState, useEffect, SyntheticEvent } from 'react';
+import React, {useState, useEffect, SyntheticEvent, useContext } from 'react';
+import { observer } from 'mobx-react-lite';
 import { Switch, Route } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 
 // components
 import Nav from './components/nav/Nav';
-import Home from './pages/Home'
+import Home from './pages/Home';
 import Activities from './pages/Activities'
 
+// api
 import { ActivitiesApi } from './api/agent';
 
-import {IActivity} from './types/activities.types'
+// types
+import {IActivity} from './types/activities.types';
+
+// store
+import ActivityStore from './stores/activityStore';
 
 const Router = () => {
-
-  const [activities, setActivities ] = useState<IActivity[]>([]);
-  const [selectedActivity, setSelectedActivity] = useState<IActivity | null >(null);
-  const [editMode, setEditMode ] = useState<boolean>(false);
+  const activityStore = useContext(ActivityStore)
+  const {getActivities, setEditMode, selectActivity, openCreateForm } = activityStore;
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [buttonTarget, setButtonTarget] = useState<string>("");
 
   useEffect(() => {
-    getActivities()
-  }, [])
-
-  const openCreateForm = () => {
-    setSelectedActivity(null);
-    setEditMode(true);
-  }
-
-  const handleSelectActivity = (id: string) => {
-    const activity = activities.find(a => a.id === id)
-    
-    if(activity !== undefined) {
-      setSelectedActivity(activity)
-      setEditMode(false)
-
-      setTimeout(() => {
-        const activityDetails = document.querySelector('.activity-details');
-        if (activityDetails) {
-          activityDetails.scrollIntoView({behavior:"smooth", block: "center"})
-        }
-      }, 200);
-    }
-    
-  }
+    getActivities();
+  }, [getActivities])
 
   const createActivity = async (activity: IActivity) => {
     try {
       setSubmitting(true);
       activity.id = uuid()
       await ActivitiesApi.create(activity);
-      getActivities()
-      setSelectedActivity(activity);
+      await getActivities();
+      selectActivity(activity.id);
       setEditMode(false);      
       setSubmitting(false)
     } catch (error) {
@@ -64,8 +46,8 @@ const Router = () => {
     try {
       setSubmitting(true)
       await ActivitiesApi.update(activity)
-      getActivities()
-      setSelectedActivity(activity);
+      await getActivities();
+      selectActivity(activity.id);
       setEditMode(false);
       setSubmitting(false);
     } catch (error) {
@@ -78,28 +60,16 @@ const Router = () => {
       setSubmitting(true)
       setButtonTarget(e.currentTarget.name)
       await ActivitiesApi.delete(activityId);
-      getActivities()
-      setSelectedActivity(null)
+      await getActivities();
+      selectActivity(undefined)
       setEditMode(false) 
       setSubmitting(false)
     } catch (error) {
       console.log(error)
     }
     
-  }
+  } 
   
-  const getActivities = async () => {
-    const response = await ActivitiesApi.list();
-    const activities:IActivity[] = []
-    
-    response.forEach(activity => {
-      activity.date = activity.date.split(".")[0]
-      activities.push(activity);
-    })
-
-    setActivities(activities);
-  }  
-
   return(
     <>
     <Nav  openCreateForm={openCreateForm}/>
@@ -107,12 +77,6 @@ const Router = () => {
           <Route exact path='/' component={Home} />
           <Route exact path='/activities' render={() => (
               <Activities 
-                activities={activities}
-                selectedActivity={selectedActivity} 
-                setSelectedActivity={setSelectedActivity}
-                editMode={editMode}
-                setEditMode={setEditMode} 
-                handleSelectActivity={handleSelectActivity}
                 createActivity={createActivity}
                 editActivity={editActivity}
                 deleteActivity={deleteActivity}
@@ -126,4 +90,4 @@ const Router = () => {
   )
 }
 
-export default Router;
+export default observer(Router);
