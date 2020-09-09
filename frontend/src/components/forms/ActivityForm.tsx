@@ -8,18 +8,10 @@ import CircularProgress from '@material-ui/core/CircularProgress/CircularProgres
 
 // stores
 import ActivityStore from '../../stores/activityStore';
-interface IProps {
-  createActivity: (activity:IActivity) => void;
-  editActivity: (activity:IActivity) => void;
-  submitting: boolean;
-}
-const ActivityForm = ({
-  createActivity,
-  editActivity,
-  submitting
-}:IProps) => {
+
+const ActivityForm = () => {
   const activityStore = useContext(ActivityStore);
-  const { selectedActivity, setEditMode } = activityStore;
+  const { selectedActivity, setEditMode, createActivity, editActivity, submitting } = activityStore;
   const initializeForm = (): IActivity => {
     
     if (selectedActivity) {

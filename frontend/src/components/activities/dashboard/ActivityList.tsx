@@ -10,19 +10,10 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 // stores
 import ActivityStore from '../../../stores/activityStore';
-interface IProps {
-  deleteActivity: (e: SyntheticEvent<HTMLButtonElement>, activityId: string) => void;
-  submitting: boolean;
-  buttonTarget:string;
-}
 
-const ActivityList = ({ 
-  deleteActivity, 
-  submitting, 
-  buttonTarget
-}:IProps) => {
+const ActivityList = () => {
   const activityStore = useContext(ActivityStore);
-  const { selectActivity, activities } = activityStore;
+  const { selectActivity, activitiesByDate, submitting, buttonTarget, deleteActivity } = activityStore;
   const renderActivity = (activity: IActivity) => {
     return(
       <div key={activity.id} className="activities-dashboard__list__item">
@@ -50,7 +41,7 @@ const ActivityList = ({
   return (
     <div className="activities-dashboard__list">
       {
-        activities.map(activity => {
+        activitiesByDate.map(activity => {
          return renderActivity(activity)
         })
       }
