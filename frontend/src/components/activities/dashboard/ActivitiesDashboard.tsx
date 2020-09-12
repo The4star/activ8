@@ -1,11 +1,9 @@
-import React, { Fragment, useContext } from 'react';
+import React, { useContext } from 'react';
 import { observer } from 'mobx-react-lite';
 import Grid from '@material-ui/core/Grid';
 
 // components
 import ActivityList from './ActivityList';
-import ActivityDetails from './ActivityDetails';
-import ActivityForm from '../../forms/ActivityForm';
 import Skeleton from '@material-ui/lab/Skeleton';
 
 // stores
@@ -13,11 +11,11 @@ import ActivityStore from '../../../stores/activityStore';
 
 const ActivitiesDashboard = () => {  
   const activityStore = useContext(ActivityStore);
-  const { activities, selectedActivity, editMode } = activityStore;
+  const { activities } = activityStore;
 
   return (
     <Grid className="activities-dashboard" container wrap="wrap-reverse" justify="center" >
-      <Grid item xs={12} sm={6} >
+      <Grid item xs={12} sm={8} >
         {
           activities.length ?
             <ActivityList />
@@ -42,18 +40,8 @@ const ActivitiesDashboard = () => {
             </div>
         }
       </Grid>
-      <Grid item xs={12} sm={4} >
-        {
-          selectedActivity && !editMode ?
-          <ActivityDetails />
-          : <Fragment />
-        }
-        {
-          editMode &&
-          <ActivityForm 
-            key={selectedActivity ? selectedActivity.id : 0} />
-        }
-        
+      <Grid item xs={12} sm={2} >
+        <h2>Activity Filters</h2>
       </Grid>
     </Grid>
   )

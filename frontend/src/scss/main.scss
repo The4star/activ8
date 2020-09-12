@@ -5,11 +5,13 @@
   font-family: 'Roboto', sans-serif;
 }
 
-@import './variables';
-@import './media-queries';
-@import './fonts';
-@import './App';
-@import './components/nav.styles';
-@import './components/activities-dashboard.styles';
+@import 'variables';
+@import 'media-queries';
+@import 'fonts';
+@import 'mixins.styles';
+@import 'App';
+@import 'components/home.styles';
+@import 'components/nav.styles';
+@import 'components/activities-dashboard.styles';
 @import 'components/activity-details.styles';
 @import 'components/activity-form.styles'

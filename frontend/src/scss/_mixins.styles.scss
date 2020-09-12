@@ -1,0 +1,21 @@
+@mixin link() {
+    position: relative;
+    color: $nav-text;
+    text-decoration: none;
+
+    &:before {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -1px;
+      left: 0;
+      background-color: $nav-text;
+      visibility: hidden;
+      transition: all 0.2s ease-in-out;
+    }
+    &:hover::before {
+      visibility: visible;
+      width: 100%;
+    }
+}
