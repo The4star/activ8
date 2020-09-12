@@ -30,12 +30,10 @@ class ActivityStore {
     } catch (error) {
       console.log(error);
     }
-    
   }
 
   @action selectActivity = (id: string | undefined) => {
     const activity = this.activities.find(a => a.id === id)
-    
     if(activity !== undefined) {
       this.selectedActivity = activity
       this.editMode = false
@@ -52,30 +50,35 @@ class ActivityStore {
     }
   }
 
-  @action setEditMode = (setting:boolean) => {
-    this.editMode = setting;
-  }
-
-  @action openCreateForm = () => {
-    this.editMode = true;
-    this.selectedActivity = undefined;
+  @action loadActivity = async (id: string) => {
+    this.selectActivity(id)
+    if (!this.selectedActivity) {
+      try {
+      const activity = await ActivitiesApi.details(id)
+      runInAction('setting activity', () => {
+        if (activity) {
+          this.selectedActivity = activity
+        }
+      })
+      } catch (error) {
+        console.log(error)
+      }
+    }
   }
 
   @action createActivity = async (activity: IActivity) => {
     try {
       this.submitting = true;
       activity.id = uuid()
-      await ActivitiesApi.create(activity);
-      await runInAction('Getting updated activities', async () => {
-        await this.getActivities();
-      })
+      const createdActivity = await ActivitiesApi.create(activity);
       
       runInAction('resetting state', () => {
-        this.selectActivity(activity.id);
+        this.selectedActivity = undefined;
+        this.activities = [...this.activities, activity]
         this.editMode = false;      
         this.submitting = false;
       })
-    
+      return createdActivity.id;
     } catch (error) {
       console.log(error)
     }
@@ -85,13 +88,10 @@ class ActivityStore {
     try {
       this.submitting = true;
       await ActivitiesApi.update(activity)
-
-      await runInAction('Getting updated activities', async () => {
-        await this.getActivities();
-      })
       
       runInAction('resetting state', () => {
-        this.selectActivity(activity.id);
+        this.selectedActivity = undefined;
+        this.activities = [...this.activities.filter(a => a.id !== activity.id), activity]
         this.editMode = false;      
         this.submitting = false;
       })

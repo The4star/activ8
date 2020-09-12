@@ -1,4 +1,5 @@
-import React, { useState, ChangeEvent, FormEvent, useContext } from 'react';
+import React, { useState, ChangeEvent, FormEvent, useContext, useEffect } from 'react';
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 import { observer } from 'mobx-react-lite';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
@@ -8,33 +9,48 @@ import CircularProgress from '@material-ui/core/CircularProgress/CircularProgres
 
 // stores
 import ActivityStore from '../../stores/activityStore';
+import LayoutWithNav from '../layouts/LayoutWithNav';
 
-const ActivityForm = () => {
+interface DetailParams {
+  id: string
+}
+
+const ActivityForm = ({history, match}:RouteComponentProps<DetailParams>) => {
   const activityStore = useContext(ActivityStore);
-  const { selectedActivity, setEditMode, createActivity, editActivity, submitting } = activityStore;
-  const initializeForm = (): IActivity => {
-    
-    if (selectedActivity) {
-      return selectedActivity
-    } else {
-      return {
-        id: '',
-        title: '',
-        category: '',
-        description: '',
-        date: '',
-        city: '',
-        venue: ''
-      }
-    }
-  }
+  const { selectedActivity, selectActivity, createActivity, editActivity, submitting, loadActivity } = activityStore;
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const [activity, setActivity ] = useState<IActivity>({
+    id: '',
+    title: '',
+    category: '',
+    description: '',
+    date: '',
+    city: '',
+    venue: ''
+  })
+  
+  useEffect(() => {
+    
+    if (match.params.id && activity.id.length === 0) {
+      loadActivity(match.params.id).then(() => {
+        if (selectedActivity) {
+          setActivity(selectedActivity)
+        }
+     });
+    }
+    return () => {
+      selectActivity(undefined)
+    }
+  }, [loadActivity, selectActivity, match.params.id, selectedActivity, activity, activity.id.length])
+  
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (activity.id === '') {
-      createActivity(activity)
+      const createdActivity = await createActivity(activity)
+      history.push(`/activities/${createdActivity}`)
     } else {
-      editActivity(activity)
+      await editActivity(activity)
+      history.push(`/activities/${activity.id}`)
     }
   }
 
@@ -48,87 +64,88 @@ const ActivityForm = () => {
     setActivity({...activity, [name]: value})
   }
 
-  const [activity, setActivity ] = useState<IActivity>(initializeForm())
+  
   
   return (
-    <div className="container">
-      <form onSubmit={handleSubmit} className="activity-form">
-        <TextField 
-          label="Title" 
-          name="title"
-          onChange={handleInputChange}
-          value={activity.title}
-          margin="normal" 
-          InputLabelProps={{
+    <LayoutWithNav >
+      <div className="container">
+        <form onSubmit={handleSubmit} className="activity-form">
+          <TextField 
+            label="Title" 
+            name="title"
+            onChange={handleInputChange}
+            value={activity.title}
+            margin="normal" 
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+          <TextField 
+            multiline 
+            label="Description" 
+            name="description"
+            onChange={handleInputChange}
+            value={activity.description}
+            margin="normal" 
+            rows={2}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+          <Select 
+            label="Category"
+            name="category"
+            defaultValue="drinks"
+            onChange={handleSelectChange} 
+            value={activity.category} 
+          >
+            <MenuItem value="culture">culture</MenuItem>
+            <MenuItem value="drinks">drinks</MenuItem>
+            <MenuItem value="travel">travel</MenuItem>
+            <MenuItem value="music">music</MenuItem>
+            <MenuItem value="film">film</MenuItem>
+          </Select>
+          <TextField 
+            id="date"
+            label="Date"
+            name="date"
+            onChange={handleInputChange}
+            value={activity.date}
+            type="datetime-local"
+            InputLabelProps={{
             shrink: true,
-          }}
-        />
-        <TextField 
-          multiline 
-          label="Description" 
-          name="description"
-          onChange={handleInputChange}
-          value={activity.description}
-          margin="normal" 
-          rows={2}
-          InputLabelProps={{
-            shrink: true,
-          }}
-        />
-        <Select 
-          label="Category"
-          name="category"
-          defaultValue="drinks"
-          onChange={handleSelectChange} 
-          value={activity.category} 
-        >
-          <MenuItem value="culture">culture</MenuItem>
-          <MenuItem value="drinks">drinks</MenuItem>
-          <MenuItem value="travel">travel</MenuItem>
-          <MenuItem value="music">music</MenuItem>
-          <MenuItem value="film">film</MenuItem>
-        </Select>
-        <TextField 
-          id="date"
-          label="Date"
-          name="date"
-          onChange={handleInputChange}
-          value={activity.date}
-          type="datetime-local"
-          // defaultValue="2021-06-06"
-          InputLabelProps={{
-          shrink: true,
-          }} 
-          margin="normal" 
-        />
-        <TextField 
-          label="City" 
-          name="city"
-          onChange={handleInputChange}
-          value={activity.city}
-          margin="normal" 
-          InputLabelProps={{
-            shrink: true,
-          }}
-        />
-        <TextField 
-          label="Venue" 
-          name="venue"
-          onChange={handleInputChange}
-          value={activity.venue}
-          margin="normal" 
-          InputLabelProps={{
-            shrink: true,
-          }}
-        />
-        <div className="button-wrapper">
-          <button className="activity-form__submit" type="submit">Submit</button>
-          {submitting && <CircularProgress size={24} className="button-progress" />}
-        </div>
-        <button className="activity-form__cancel" onClick={() => setEditMode(false)}>Cancel</button>
-      </form>
-    </div>
+            }} 
+            margin="normal" 
+          />
+          <TextField 
+            label="City" 
+            name="city"
+            onChange={handleInputChange}
+            value={activity.city}
+            margin="normal" 
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+          <TextField 
+            label="Venue" 
+            name="venue"
+            onChange={handleInputChange}
+            value={activity.venue}
+            margin="normal" 
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+          <div className="button-wrapper">
+            <button className="activity-form__submit" type="submit">Submit</button>
+            {submitting && <CircularProgress size={24} className="button-progress" />}
+          </div>
+          <button className="activity-form__cancel" onClick={() => selectedActivity !== undefined ? history.push(`/activities/${selectedActivity.id}`) : history.push('/activities')}>Cancel</button>
+        </form>
+      </div>
+    </LayoutWithNav>
   )
 }
 
-export default observer(ActivityForm)
+export default withRouter(observer(ActivityForm));

@@ -1,18 +1,27 @@
-import React, { Fragment } from 'react';
+import React, {useEffect, useContext } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import ActivitiesDashboard from '../components/activities/dashboard/ActivitiesDashboard';
 
+// store
+import ActivityStore from '../stores/activityStore';
+import LayoutWithNav from '../components/layouts/LayoutWithNav';
+
 const Activities = () => {
+
+  const activityStore = useContext(ActivityStore)
+  const {getActivities } = activityStore;
+
+  useEffect(() => {
+    getActivities();
+  }, [getActivities])
+
     return (
-      <Fragment>
-        <div className="main">
-          <div className="container">
-            <ActivitiesDashboard />
-          </div>
+      <LayoutWithNav>
+        <div className="container">
+          <ActivitiesDashboard />
         </div>
-      </Fragment>
-        
+      </LayoutWithNav>
     )
 }
 

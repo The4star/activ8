@@ -1,5 +1,6 @@
 import React, {SyntheticEvent, useContext} from 'react'
 import { observer } from 'mobx-react-lite';
+import {Link} from 'react-router-dom';
 import spacetime from 'spacetime';
 
 // types
@@ -13,7 +14,7 @@ import ActivityStore from '../../../stores/activityStore';
 
 const ActivityList = () => {
   const activityStore = useContext(ActivityStore);
-  const { selectActivity, activitiesByDate, submitting, buttonTarget, deleteActivity } = activityStore;
+  const { activitiesByDate, submitting, buttonTarget, deleteActivity } = activityStore;
   const renderActivity = (activity: IActivity) => {
     return(
       <div key={activity.id} className="activities-dashboard__list__item">
@@ -31,7 +32,10 @@ const ActivityList = () => {
             <button name={activity.id} onClick={(e: SyntheticEvent<HTMLButtonElement>) => deleteActivity(e, activity.id)} className="activities-dashboard__list__item__cta-section__delete-button">Delete</button>
             {submitting && buttonTarget === activity.id && <CircularProgress size={24} className="button-progress" />}
           </div>
-          <button onClick={() => selectActivity(activity.id)} className="activities-dashboard__list__item__cta-section__view-button">View</button>
+          <Link to={`activities/${activity.id}`} >
+            <button className="activities-dashboard__list__item__cta-section__view-button">View</button>
+          </Link>
+          
         </div>
         
       </div>

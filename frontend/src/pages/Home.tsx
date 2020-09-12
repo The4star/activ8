@@ -1,15 +1,16 @@
 import React, {Fragment} from 'react';
+import {Link} from 'react-router-dom';
 
 const Home = () => {
     return (
       <Fragment>
-        <div className="main">
+        <div className="home-page">
           <div className="container">
-            <h1>Home Page</h1>
+            <h1>Activ8</h1>
+            <Link to="/activities" className="home-page__link">Login</Link>
           </div>
         </div>
       </Fragment>
-        
     )
 }
 
