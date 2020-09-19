@@ -13,12 +13,23 @@ class ActivityStore {
   @observable buttonTarget: string = "";
 
   @computed get activitiesByDate() {
-    return this.activities.sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
+    return this.groupActivitiesByMonth(this.activities);
   }
+
+  groupActivitiesByMonth = (activities: IActivity[]) => {
+    const sortedActivities = activities.sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
+    const byMonth = Object.entries(sortedActivities.reduce((allActivities, activity) => {
+      const month = activity.date.split("T")[0].split("-")[1];
+      allActivities[month] = allActivities[month] ? [...allActivities[month], activity] : [activity]
+      return allActivities
+    }, {} as {[key: string]: IActivity[]}))
+    return byMonth
+  } 
 
   @action getActivities = async () => {
     try {
       const activities = await ActivitiesApi.list();
+      console.log(this.groupActivitiesByMonth(activities))
       runInAction('loading activities', () => {
         const allActivities: IActivity[] = [];
         activities.forEach(activity => {

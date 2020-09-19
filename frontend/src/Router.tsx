@@ -1,15 +1,15 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, withRouter, RouteComponentProps } from 'react-router-dom';
 
 
 // components
 import Home from './pages/Home';
 import Activities from './pages/Activities'
 import ActivityForm from './components/forms/ActivityForm';
-import ActivityDetails from './components/activities/dashboard/ActivityDetails';
+import ActivityDetails from './components/activities/activityDetails/ActivityDetails';
 
-const Router = () => {
+const Router = ({location}:RouteComponentProps) => {
 
   return(
     <>
@@ -17,10 +17,10 @@ const Router = () => {
           <Route exact path='/' component={Home} />
           <Route exact path='/activities' component={Activities}/>
           <Route path='/activities/:id' component={ActivityDetails} />
-          <Route path={["/createactivity", '/edit/:id']} component={ActivityForm} />
+          <Route key={location.key} path={["/createactivity", '/edit/:id']} component={ActivityForm} />
       </Switch>
     </>
   )
 }
 
-export default observer(Router);
+export default withRouter(observer(Router));

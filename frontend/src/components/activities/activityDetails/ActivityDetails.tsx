@@ -1,13 +1,19 @@
 import React, { Fragment, useContext, useEffect } from 'react'
 import { withRouter } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
-import spacetime from 'spacetime';
+import Grid from '@material-ui/core/Grid';
+// import spacetime from 'spacetime';
 
 // stores
 import ActivityStore from '../../../stores/activityStore';
+
+// components
 import LayoutWithNav from '../../layouts/LayoutWithNav';
 import { RouteComponentProps } from 'react-router-dom';
-
+import ActivityDetailsHeader from './ActivityDetailsHeader';
+import ActivityDetailsInfo from './ActivityDetailsInfo';
+import ActivityDetailsChat from './ActivityDetailsChat';
+import ActivityDetailsSideBar from './ActivityDetailsSideBar';
 
 interface DetailParams {
   id:string
@@ -24,20 +30,16 @@ const ActivityDetails = ({match, history}:RouteComponentProps<DetailParams>) => 
     return (
       <LayoutWithNav>
         <div className="container">
-          <div className="activity-details">
-            <div className="activity-details__img-container">
-              <img src={`/assets/img/categoryImages/${selectedActivity.category}.jpg`} alt="placeholder"/>
-            </div>
-            <div className="activity-details__text-area">
-              <h3>{selectedActivity.title}</h3>
-              <p className="activity-details__text-area__date">{spacetime(selectedActivity.date).format("nice")}</p>
-              <p>{selectedActivity.description}</p>
-            </div>
-            <div className="activity-details__button-area">
-              <button onClick={() => history.push(`/edit/${selectedActivity.id}`)}>Edit</button>
-              <button onClick={() => history.push('/activities')}>Close</button>
-            </div>
-          </div>
+          <Grid className="activities-dashboard" container wrap="wrap-reverse" justify="center" >
+            <Grid item xs={12} sm={8} >
+              <ActivityDetailsHeader />
+              <ActivityDetailsInfo />
+              <ActivityDetailsChat />
+            </Grid>
+            <Grid item xs={12} sm={2} >
+              <ActivityDetailsSideBar />
+            </Grid>
+          </Grid>
         </div>
       </LayoutWithNav>
     )
