@@ -68,7 +68,7 @@ const ActivityForm = ({history, match}:RouteComponentProps<DetailParams>) => {
   
   return (
     <LayoutWithNav >
-      <div className="container">
+      <div className="container container__centred">
         <form onSubmit={handleSubmit} className="activity-form">
           <TextField 
             label="Title" 

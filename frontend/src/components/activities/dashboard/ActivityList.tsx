@@ -1,53 +1,30 @@
-import React, {SyntheticEvent, useContext} from 'react'
+import React, {useContext} from 'react'
 import { observer } from 'mobx-react-lite';
-import {Link} from 'react-router-dom';
-import spacetime from 'spacetime';
-
-// types
-import { IActivity } from '../../../types/activities.types'
-
-// components
-import CircularProgress from '@material-ui/core/CircularProgress';
-
+import { monthNames } from '../../helpers/general'
 // stores
 import ActivityStore from '../../../stores/activityStore';
 
+import ActivityItem from './ActivityItem';
+
 const ActivityList = () => {
   const activityStore = useContext(ActivityStore);
-  const { activitiesByDate, submitting, buttonTarget, deleteActivity } = activityStore;
-  const renderActivity = (activity: IActivity) => {
-    return(
-      <div key={activity.id} className="activities-dashboard__list__item">
-        <h3>{activity.title}</h3>
-        <p className="activities-dashboard__list__item__date">{spacetime(activity.date).format("nice")}</p>
-        <div className="activities-dashboard__list__item__description">
-          <p>{activity.description}</p>
-          <p>{activity.city}, {activity.venue}</p>
-        </div>
-        <div className="activities-dashboard__list__item__category">
-          {activity.category}
-        </div>
-        <div className="activities-dashboard__list__item__cta-section">
-          <div className="button-wrapper">
-            <button name={activity.id} onClick={(e: SyntheticEvent<HTMLButtonElement>) => deleteActivity(e, activity.id)} className="activities-dashboard__list__item__cta-section__delete-button">Delete</button>
-            {submitting && buttonTarget === activity.id && <CircularProgress size={24} className="button-progress" />}
-          </div>
-          <Link to={`activities/${activity.id}`} >
-            <button className="activities-dashboard__list__item__cta-section__view-button">View</button>
-          </Link>
-          
-        </div>
-        
-      </div>
-    )
-  }
+  const { activitiesByDate } = activityStore;
+  
+  
 
   return (
-    <div className="activities-dashboard__list">
+    <div className="activity-list">
       {
-        activitiesByDate.map(activity => {
-         return renderActivity(activity)
-        })
+        activitiesByDate.map(([group, activities]) => (
+          <div className="activity-group">
+          <p className="activity-group__month">{monthNames[parseInt(group) - 1]}</p>
+          {
+            activities.map(activity => (
+              <ActivityItem key={activity.id} activity={activity} />
+            ))
+          }
+          </div>
+        ))
       }
     </div>
     

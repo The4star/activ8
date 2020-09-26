@@ -1,16 +1,74 @@
 .activities-dashboard {
   margin: auto auto;
-  &__list {
+  .activity-list {
     width: 100%;
-    &__item{
+
+    p {
+      margin: 10px 0;
+    }
+
+    .activity-group {
+      &__month {
+        display: inline-block;
+        border-radius: 5px;
+        padding: 10px;
+        color: $white;
+        background-color: $blue;
+      }
+    }
+
+    .activity-item{
       position: relative;
       width: 90%;
       margin: 20px 0;
       padding: 10px;
       background: $white;
+      box-shadow: 1px 1px 4px 1px grey;
 
-      p {
+      &__header {
+        display: flex;
+        
+      }
+      
+      &__image {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        overflow: hidden;
+        border-radius: 100px;
+
+        img {
+          width: 100%;
+          height: auto;
+        }
+      }
+      
+      &__title-text {
+        margin-left: 20px;
+      }
+
+      &__time-place {
+        display: flex;
+        align-items: center;
+        .MuiSvgIcon-root {
+          margin: 0 5px;
+          &:nth-of-type(1) {
+            margin-bottom: 3px;
+          }
+        }
+      }
+
+      &__attendees {
+        display: flex;
+        align-items: center;
+        height: 50px;
+        border-top: 1px solid $dark-grey;
+        border-bottom: 1px solid $dark-grey;
+      }
+
+      &__description {
         margin: 10px 0;
+        min-height: 50px;
       }
 
       &__category {
@@ -20,32 +78,23 @@
         border-radius: 5px;
         color: $dark-grey;
       }
+    
       &__cta-section {
         display: flex;
         position: absolute;
         right: 10px;
         bottom: 10px;
-        
-        &__view-button {
-          background: $nav-background;
-          padding: 10px 20px;
-          margin-left: 5px;
-          border-radius: 5px;
-          border: none;
-          color: $white;
-          cursor: pointer;
-        }
-
-        &__delete-button {
-          background: $red;
-          padding: 10px 20px;
-          border-radius: 5px;
-          border: none;
-          color: $white;
-          cursor: pointer;
-        }
       }
-      
+    
+      &__view-button {
+        background: $nav-background;
+        @include button();
+      }
+    
+      &__delete-button {
+        background: $red;
+        @include button();
+      }
     }
   }
 }

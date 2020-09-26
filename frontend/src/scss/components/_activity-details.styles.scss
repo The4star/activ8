@@ -1,48 +1,186 @@
 .activity-details {
   margin-top: 20px;
-  background: $white;
-  border-radius: 10px;
-  width: 50%;
-  overflow: hidden;
+  
+  .activity-details-header {
+    width: 90%;
+    box-shadow: 1px 1px 4px 1px grey;
+    &__title-area {
+      position: relative;
 
-  &__img-container {
-    width: 100%;
-    object-fit: cover;
-    overflow: hidden;
+      img { 
+        width: 100%;
+        filter: brightness(30%);
+      }
+    }
 
-    img {
-      width: 100%;
+    &__title-text {
+      position: absolute;
+      bottom: 7%;
+      left: 2%;
+
+      p {
+        &:nth-of-type(2) {
+          margin-top: 10px;
+        }
+      }
+
+      color: $white;
+    }
+
+    &__selection-area {
+      position: relative;
+      height: 70px;
+      background: $white;
+      display: flex;
+      align-items: center;
+      button {
+        @include button();
+
+        &.activity-join{
+          background: $green;
+        }
+        &.activity-cancel{
+          background: $red;
+        }
+        &.activity-manage{
+          background: $nav-background;
+          position: absolute;
+          right: 10px;
+        }
+      }
     }
   }
 
-  &__text-area {
-    margin: 10px;
-    &__date {
-      color: $dark-grey;
-      margin: 10px 0;
-    }
-  }
-
-  &__button-area {
-    display: flex;
-    justify-content: center;
-    margin: 20px 10px;
-    
-
-    button {
-      width: 50%;
-      margin: 0 1px;
-      background: none;
-      padding: 5px;
-      font-size: 20px;
-      cursor: pointer;
-      border:2px solid $dark-grey;
-      color:$dark-grey;
-
-      &:nth-of-type(1) {
-        border: 2px solid $blue;
+  .activity-details-info {
+    margin-top: 20px;
+    background: $white;
+    width: 90%;
+    box-shadow: 1px 1px 4px 1px grey;
+    &__section {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid grey;
+      .MuiSvgIcon-root {
+        margin-right: 10px;
         color: $blue;
       }
+    }
+  }
+  
+  .activity-details-chat {
+    width: 90%;
+    margin-top: 20px;
+    background: $white;
+    height: 500px;
+    box-shadow: 1px 1px 4px 1px grey;
+
+    &__header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 50px;
+      background: $nav-background;
+      color: $white;
+
+    }
+
+    &__messages-section {
+      margin: 20px;
+      height: 220px;
+      overflow-y: auto;
+    }
+
+    &__message {
+      display: flex;
+      width: 100%;
+      margin: 10px 0;      
+    }
+
+    &__user-image {
+      object-fit: cover;
+      overflow: hidden;
+      border-radius: 100px;
+      width: 30px;
+      height: 30px;
+
+      img {
+        width: 100%;
+        height: auto;
+      }
+    }
+
+    &__message-details {
+      margin-left: 10px;
+
+      button {
+        border: none;
+        background: none;
+        color: grey ;
+        padding: 0;
+        cursor: pointer;
+      }
+    }
+
+    form {
+      margin: 20px;
+      width: 90%;
+      
+      button {
+        @include button();
+        display: flex;
+        align-items: center;
+        background: $nav-background;
+      }
+    }
+  }
+  .activity-details-sidebar {
+    width: 90%;
+    background: $white;
+    position: relative;
+    margin-bottom: 30px;
+
+    &__header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 50px;
+      background: $nav-background;
+      color: $white;
+    }
+
+    &__image {
+      object-fit: cover;
+      overflow: hidden;
+      border-radius: 100px;
+      width: 60px;
+      height: 60px;
+
+      img {
+        width: 100%;
+        height: auto;
+      }
+    }
+    
+
+    &__attendee {
+      display: flex;
+      padding: 10px;
+      border-bottom: 1px solid grey;
+    }
+
+    &__attendee-details {
+      margin-left: 10px;
+    }
+
+    &__host {
+      position: absolute;
+      right: 10px;
+      color: $blue;
+    }
+
+    &__following {
+      color: grey;
     }
   }
 }
