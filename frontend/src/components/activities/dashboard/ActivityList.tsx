@@ -1,6 +1,6 @@
 import React, {useContext} from 'react'
 import { observer } from 'mobx-react-lite';
-
+import { monthNames } from '../../helpers/general'
 // stores
 import ActivityStore from '../../../stores/activityStore';
 
@@ -10,9 +10,7 @@ const ActivityList = () => {
   const activityStore = useContext(ActivityStore);
   const { activitiesByDate } = activityStore;
   
-  const monthNames = ["January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
-  ];  
+  
 
   return (
     <div className="activity-list">

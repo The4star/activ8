@@ -50,7 +50,7 @@ class ActivityStore {
       this.editMode = false
 
       setTimeout(() => {
-        const activityDetails = document.querySelector('.activity-details');
+        const activityDetails = document.querySelector('.activity-details-header');
         if (activityDetails) {
           activityDetails.scrollIntoView({behavior:"smooth", block: "center"})
         }
